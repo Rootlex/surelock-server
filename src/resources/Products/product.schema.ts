@@ -27,6 +27,7 @@ export const updateProductSchema = object({
         price: z.string().optional(),
         quantity: z.number().optional(),
         image_urls: z.array(z.string()).optional(),
+        is_active: z.boolean().optional(),
     }),
 });
 

@@ -1,5 +1,6 @@
 import express from "express";
 import {
+    activateProductHandler,
     deleteProductsHandler,
     getProductsHandler,
     insertProductHandler,
@@ -21,12 +22,14 @@ productsRouter.get(
 );
 
 productsRouter
-    .route("")
+    .route("/")
     .post(validateResource(insertProductSchema), insertProductHandler);
 
 productsRouter
     .route("/:id")
     .patch(validateResource(updateProductSchema), updateProductHandler);
+
+productsRouter.route("/activate/:id").patch(activateProductHandler);
 
 productsRouter.delete("/:id", deleteProductsHandler);
 
