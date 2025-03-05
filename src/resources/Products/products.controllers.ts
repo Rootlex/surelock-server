@@ -116,12 +116,14 @@ export const getProductsHandler = async (
     next: NextFunction
 ) => {
     try {
-        const { created_at, id, is_active, name, price, quantity, updated_at } =
+        const { created_at, id, name, is_active, price, quantity, updated_at } =
             req.query;
         const products = await prisma.products.findMany({
             where: {
                 id: id ? { equals: id } : undefined,
-                name: name ? { contains: name } : undefined,
+                name: name
+                    ? { contains: name, mode: "insensitive" }
+                    : undefined,
                 price: price ? { gte: parseFloat(price) } : undefined,
                 quantity: quantity ? { equals: +quantity } : undefined,
                 created_at: created_at
@@ -130,16 +132,18 @@ export const getProductsHandler = async (
                 updated_at: updated_at
                     ? { gte: new Date(updated_at) }
                     : undefined,
-                is_active: true,
+                is_active: is_active
+                    ? { equals: is_active === "true" }
+                    : undefined,
             },
             orderBy: {
                 created_at: "desc",
             },
         });
 
-        return res.status(201).json({ count: products.length, data: products });
+        return res.status(201).json(products);
     } catch (error: any) {
-        console.log("[FETCH_USERS_ERROR]:", error);
+        console.log("[FETCH_PRODUCTS_ERROR]:", error);
         next(new CustomError(error.message, error.statusCode));
     }
 };

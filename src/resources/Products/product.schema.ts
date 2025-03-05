@@ -8,7 +8,7 @@ export const filterProductSchema = object({
         quantity: z.string().optional(),
         created_at: z.string().optional(),
         updated_at: z.string().optional(),
-        is_active: z.boolean().optional(),
+        is_active: z.string().optional(),
     }),
 });
 
